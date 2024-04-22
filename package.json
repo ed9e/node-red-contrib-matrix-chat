@@ -31,6 +31,7 @@
       "matrix-leave-room": "src/matrix-leave-room.js",
       "matrix-crypt-file": "src/matrix-crypt-file.js",
       "matrix-room-kick": "src/matrix-room-kick.js",
+      "matrix-room-history": "src/matrix-room-history.js",
       "matrix-room-ban": "src/matrix-room-ban.js",
       "matrix-synapse-users": "src/matrix-synapse-users.js",
       "matrix-synapse-register": "src/matrix-synapse-register.js",

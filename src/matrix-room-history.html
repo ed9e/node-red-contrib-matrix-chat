@@ -1,0 +1,86 @@
+<script type="text/javascript">
+    RED.nodes.registerType('matrix-room-history',{
+        category: 'matrix',
+        color: '#00b7ca',
+        icon: "matrix.png",
+        outputLabels: ["success", "error"],
+        inputs:1,
+        outputs:2,
+        defaults: {
+            name: { value: null },
+            server: { value: "", type: "matrix-server-config" },
+            roomId: { value: null },
+            limit: { value: 10 }
+        },
+        label: function() {
+            return this.name || "Room History";
+        },
+        paletteLabel: 'Room History'
+    });
+</script>
+
+<script type="text/html" data-template-name="matrix-room-history">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+ 	 <div class="form-row">
+     	<label for="node-input-server"><i class="fa fa-user"></i> Matrix Server Config</label>
+     	<input type="text" id="node-input-server">
+ 	</div>
+    <div class="form-row">
+        <label for="node-input-roomId"><i class="fa fa-comments"></i> Room ID</label>
+        <input type="text" id="node-input-roomId" placeholder="msg.topic">
+        <pre class="form-tips" id="node-input-roomId-error" style="color: #721c24;background-color: #f8d7da;border-color: #f5c6cb;margin-bottom: 12px;margin-top: 12px;display:none;"></pre>
+    </div>
+    <div class="form-row">
+        <label for="node-input-limit"><i class="fa fa-comment"></i> Limit</label>
+        <input type="text" id="node-input-limit" placeholder="10">
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            $("#node-input-roomId").on("keyup", function() {
+                if($(this).val() && !$(this).val().startsWith("!")) {
+                    $("#node-input-roomId-error").html(`Room IDs start with exclamation point "!"<br />Example: !OGEhHVWSdvArJzumhm:matrix.org`).show();
+                } else {
+                    $("#node-input-roomId-error").hide();
+                }
+            }).trigger('keyup');
+        });
+    </script>
+</script>
+
+<script type="text/html" data-help-name="matrix-room-history">
+    <h3>Details</h3>
+    <p>This node fetch history from room.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+
+        <dt class="optional">msg.topic
+            <span class="property-type">string | null</span>
+        </dt>
+        <dd> The room to fetch history from.</dd>
+
+        <dt class="optional">limit
+            <span class="property-type">integer</span>
+        </dt>
+        <dd> Limit of messages to fetch.</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <ol class="node-ports">
+        <li>Success
+            <dl class="message-properties">
+                <dt>msg.payload <span class="property-type">string</span></dt>
+                <dd>the response from matrix.</dd>
+            </dl>
+        </li>
+        <li>Error
+            <dl class="message-properties">
+                <dt>msg.error <span class="property-type">string</span></dt>
+                <dd>the error that occurred.</dd>
+            </dl>
+        </li>
+    </ol>
+</script>
