@@ -55,10 +55,13 @@ module.exports = function(RED) {
                     const timeline = JSON.parse(JSON.stringify(e.timeline));
                     msg.timeline = timeline;
                     if (msg.thread_id) {
-
+                        const firstMessageInThread =
                         msg.thread =
                         timeline.filter((t) => {
                             const content = t?.content ?? t?.decrypted.content;
+                            if((t?.event_id ?? t?.decrypted.event_id) === msg.thread_id){
+                                return true;
+                            }
                             return content["m.relates_to"]?.event_id === msg.thread_id
                         })
                         msg.thread = msg.thread.map((t)=>{
