@@ -141,8 +141,8 @@ module.exports = function(RED) {
                 content['body'] = ' * ' + content['body'];
             }
 
-            if (node.messageInThread && !msg["m.relates_to"]?.event_id) {
-                const relatesId = msg.eventId;
+            if (node.messageInThread) {
+                const relatesId = msg.content["m.relates_to"]?.event_id ?? msg.eventId;
                 content['thread_id'] = relatesId;
                 content["m.relates_to"] = {
                     type: "m.thread",
