@@ -1,4 +1,8 @@
 const {RelationType} = require("matrix-js-sdk");
+const showdown  = require('showdown'),
+    converter = new showdown.Converter(),
+    text      = '# hello, markdown!',
+    html      = converter.makeHtml(text);
 
 module.exports = function(RED) {
     function MatrixSendImage(n) {
@@ -120,6 +124,11 @@ module.exports = function(RED) {
                     (typeof msg.formatted_payload !== 'undefined' && msg.formatted_payload)
                         ? msg.formatted_payload.toString()
                         : payload.toString();
+            }
+
+            if (msgFormat === 'showdown') {
+                content.format = "org.matrix.custom.html";
+                content.formatted_body = converter.makeHtml(payload.toString());
             }
 
             if((node.replaceMessage || msg.replace) && msg.eventId) {

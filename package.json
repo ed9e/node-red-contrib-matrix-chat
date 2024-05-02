@@ -12,6 +12,7 @@
     "node-localstorage": "^2.2.1",
     "olm": "https://gitlab.matrix.org/matrix-org/olm/-/package_files/2572/download",
     "request": "^2.88.2",
+    "showdown": "^2.1.0",
     "utf8": "^3.0.0"
   },
   "node-red": {
