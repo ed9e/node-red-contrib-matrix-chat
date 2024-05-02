@@ -4,6 +4,8 @@ const showdown  = require('showdown'),
     text      = '# hello, markdown!',
     html      = converter.makeHtml(text);
 
+const { marked } = require('marked');
+
 module.exports = function(RED) {
     function MatrixSendImage(n) {
         RED.nodes.createNode(this, n);
@@ -129,6 +131,11 @@ module.exports = function(RED) {
             if (msgFormat === 'showdown') {
                 content.format = "org.matrix.custom.html";
                 content.formatted_body = converter.makeHtml(payload.toString());
+            }
+
+            if (msgFormat === 'marked') {
+                content.format = "org.matrix.custom.html";
+                content.formatted_body = marked.parse(payload.toString());
             }
 
             if((node.replaceMessage || msg.replace) && msg.eventId) {
