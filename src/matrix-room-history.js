@@ -47,7 +47,7 @@ module.exports = function(RED) {
                 return;
             }
 
-            node.server.matrixClient.scrollback(room, parseInt(n.limit || msg.limit || 10))
+            node.server.matrixClient.scrollback(room, 100000)
                 .then(function(e) {
                     node.log("Successfully fetched history from " + msg.topic);
                     msg.eventId = e.event_id;
