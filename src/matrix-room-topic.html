@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('matrix-room-history',{
+    RED.nodes.registerType('matrix-room-description',{
         category: 'matrix',
         color: '#00b7ca',
         icon: "matrix.png",
@@ -12,13 +12,13 @@
             roomId: { value: null },
         },
         label: function() {
-            return this.name || "Room Topic";
+            return this.name || "Room description";
         },
-        paletteLabel: 'Room Topic'
+        paletteLabel: 'Room description'
     });
 </script>
 
-<script type="text/html" data-template-name="matrix-room-history">
+<script type="text/html" data-template-name="matrix-room-topic">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -47,15 +47,15 @@
 
 <script type="text/html" data-help-name="matrix-room-history">
     <h3>Details</h3>
-    <p>This node fetch topic from room.</p>
+    <p>This node fetch description from room.</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
 
-        <dt class="optional">msg.topic
+        <dt class="optional">msg.description
             <span class="property-type">string | null</span>
         </dt>
-        <dd> The room to fetch topic from.</dd>
+        <dd> The room to fetch description from.</dd>
 
     </dl>
 
