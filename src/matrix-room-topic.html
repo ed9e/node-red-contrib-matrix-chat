@@ -10,12 +10,11 @@
             name: { value: null },
             server: { value: "", type: "matrix-server-config" },
             roomId: { value: null },
-            limit: { value: 10 }
         },
         label: function() {
-            return this.name || "Room History";
+            return this.name || "Room Topic";
         },
-        paletteLabel: 'Room History'
+        paletteLabel: 'Room Topic'
     });
 </script>
 
@@ -33,10 +32,6 @@
         <input type="text" id="node-input-roomId" placeholder="msg.topic">
         <pre class="form-tips" id="node-input-roomId-error" style="color: #721c24;background-color: #f8d7da;border-color: #f5c6cb;margin-bottom: 12px;margin-top: 12px;display:none;"></pre>
     </div>
-    <div class="form-row">
-        <label for="node-input-limit"><i class="fa fa-comment"></i> Limit</label>
-        <input type="text" id="node-input-limit" placeholder="10">
-    </div>
     <script type="text/javascript">
         $(function(){
             $("#node-input-roomId").on("keyup", function() {
@@ -52,7 +47,7 @@
 
 <script type="text/html" data-help-name="matrix-room-history">
     <h3>Details</h3>
-    <p>This node fetch history from room.</p>
+    <p>This node fetch topic from room.</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -60,12 +55,8 @@
         <dt class="optional">msg.topic
             <span class="property-type">string | null</span>
         </dt>
-        <dd> The room to fetch history from.</dd>
+        <dd> The room to fetch topic from.</dd>
 
-        <dt class="optional">limit
-            <span class="property-type">integer</span>
-        </dt>
-        <dd> Limit of messages to fetch.</dd>
     </dl>
 
     <h3>Outputs</h3>

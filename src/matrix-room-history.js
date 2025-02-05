@@ -78,6 +78,7 @@ module.exports = function(RED) {
                     msg.error = e;
                     node.send([null, msg]);
                 });
+
         });
     }
     RED.nodes.registerType("matrix-room-history", MatrixHistory);

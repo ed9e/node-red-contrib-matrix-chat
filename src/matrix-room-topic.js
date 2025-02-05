@@ -1,5 +1,5 @@
 module.exports = function(RED) {
-    function MatrixHistory(n) {
+    function MatrixTopic(n) {
         RED.nodes.createNode(this, n);
 
         var node = this;
@@ -7,7 +7,6 @@ module.exports = function(RED) {
         this.name = n.name;
         this.server = RED.nodes.getNode(n.server);
         this.roomId = n.roomId;
-        this.limit = n.limit;
 
         if (!node.server) {
             node.warn("No configuration node");
@@ -47,39 +46,9 @@ module.exports = function(RED) {
                 return;
             }
 
-            node.server.matrixClient.scrollback(room, 100000)
-                .then(function(e) {
-                    node.log("Successfully fetched history from " + msg.topic);
-                    msg.eventId = e.event_id;
-
-                    const timeline = JSON.parse(JSON.stringify(e.timeline));
-                    msg.timeline = timeline;
-                    if (msg.thread_id) {
-                        const firstMessageInThread =
-                        msg.thread =
-                        timeline.filter((t) => {
-                            const content = t?.content ?? t?.decrypted.content;
-                            if((t?.event_id ?? t?.decrypted.event_id) === msg.thread_id){
-                                return true;
-                            }
-                            return content["m.relates_to"]?.event_id === msg.thread_id
-                        })
-                        msg.thread = msg.thread.map((t)=>{
-                            return {
-                                content: t.content ?? t.decrypted.content,
-                                sender: t.sender ?? t.decrypted.sender,
-                            }
-                        })
-                    }
-                    node.send([msg, null]);
-                })
-                .catch(function(e){
-                    node.error("Error trying to fetch history from " + msg.topic);
-                    msg.error = e;
-                    node.send([null, msg]);
-                });
+            msg.description = room.currentState.getStateEvents("m.room.topic", "");
 
         });
     }
-    RED.nodes.registerType("matrix-room-history", MatrixHistory);
+    RED.nodes.registerType("matrix-room-topic", MatrixTopic);
 }
