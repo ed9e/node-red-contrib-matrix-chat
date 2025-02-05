@@ -47,7 +47,7 @@ module.exports = function(RED) {
                 return;
             }
 
-            msg.description = room.currentState.getStateEvents("m.room.topic", "").getContent();
+            msg.description = room.currentState.getStateEvents("m.room.topic", "")?.getContent();
 
             node.server.matrixClient.scrollback(room, 100000)
                 .then(function(e) {
