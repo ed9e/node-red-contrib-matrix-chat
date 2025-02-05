@@ -1,5 +1,5 @@
 module.exports = function(RED) {
-    function MatrixTopic(n) {
+    function MatrixDescription(n) {
         RED.nodes.createNode(this, n);
 
         var node = this;
@@ -50,5 +50,5 @@ module.exports = function(RED) {
 
         });
     }
-    RED.nodes.registerType("matrix-room-description", MatrixTopic);
+    RED.nodes.registerType("matrix-room-description", MatrixDescription);
 }
