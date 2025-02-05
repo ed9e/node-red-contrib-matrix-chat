@@ -47,6 +47,8 @@ module.exports = function(RED) {
                 return;
             }
 
+            msg.description = room.currentState.getStateEvents("m.room.topic", "");
+
             node.server.matrixClient.scrollback(room, 100000)
                 .then(function(e) {
                     node.log("Successfully fetched history from " + msg.topic);
