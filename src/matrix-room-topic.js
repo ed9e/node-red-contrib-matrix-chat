@@ -50,5 +50,5 @@ module.exports = function(RED) {
 
         });
     }
-    RED.nodes.registerType("matrix-room-topic", MatrixTopic);
+    RED.nodes.registerType("matrix-room-description", MatrixTopic);
 }
