@@ -46,7 +46,12 @@ module.exports = function(RED) {
                 return;
             }
 
-            msg.description = room.currentState.getStateEvents("m.room.topic", "");
+            let stateEvent = room.currentState.getStateEvents("m.room.topic", "");
+            if (stateEvent) {
+                msg.description = stateEvent.getContent().topic;
+            } else {
+                node.error("No topic state event found in room");
+            }
 
         });
     }
