@@ -47,6 +47,9 @@ module.exports = function(RED) {
                 return;
             }
 
+            
+            msg.roomTopic = room.topic || "No topic";
+
             const setUrls = (urlKey, encryptedKey) => {
                 const url = msg.encrypted ? msg.content[encryptedKey]?.url : msg.content[urlKey];
                 if (url) {
