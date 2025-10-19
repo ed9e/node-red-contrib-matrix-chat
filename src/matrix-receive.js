@@ -64,6 +64,14 @@ module.exports = function(RED) {
                 }
             };
 
+            let room = null;
+            if( null === (room = node.server.matrixClient.getRoom(msg.topic))){
+                node.error("Room doesn't exists on there is no data");
+                return;
+            }
+
+            msg.description = room.currentState.getStateEvents("m.room.topic", "");
+
             switch (msg.type) {
                 case 'm.emote':
                     if (!node.acceptEmotes) return;
