@@ -69,7 +69,7 @@ module.exports = function(RED) {
                 node.error("Room doesn't exists on there is no data");
                 return;
             }
-            node.log(room.currentState);
+            
             msg.description = room.currentState.getStateEvents("m.room.topic", "");
 
             switch (msg.type) {
