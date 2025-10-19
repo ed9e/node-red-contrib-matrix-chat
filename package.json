@@ -22,6 +22,7 @@
       "matrix-server-config": "src/matrix-server-config.js",
       "matrix-receive": "src/matrix-receive.js",
       "matrix-send-message": "src/matrix-send-message.js",
+      "matrix-typing": "src/matrix-typing.js",
       "matrix-delete-event": "src/matrix-delete-event.js",
       "matrix-send-file": "src/matrix-send-file.js",
       "matrix-send-image": "src/matrix-send-image.js",
@@ -42,7 +43,8 @@
       "matrix-synapse-join-room": "src/matrix-synapse-join-room.js",
       "matrix-paginate-room": "src/matrix-paginate-room.js",
       "matrix-whois-user": "src/matrix-whois-user.js",
-      "matrix-room-users": "src/matrix-room-users.js"
+      "matrix-room-users": "src/matrix-room-users.js",
+      "matrix-event-relations": "src/matrix-event-relations.js"
     }
   },
   "engines": {
