@@ -47,8 +47,13 @@ module.exports = function(RED) {
                 return;
             }
 
-            
-            msg.roomTopic = room.topic || "No topic";
+            const topicEvent = room.currentState.getStateEvents("m.room.topic", "");
+            if (topicEvent) {
+                console.log("Temat pokoju:", topicEvent.getContent().topic);
+            } else {
+                console.log("Pokój nie ma ustawionego tematu.");
+            }
+            msg.roomTopic = topicEvent?.getContent()?.topic || "No topic";
 
             const setUrls = (urlKey, encryptedKey) => {
                 const url = msg.encrypted ? msg.content[encryptedKey]?.url : msg.content[urlKey];
