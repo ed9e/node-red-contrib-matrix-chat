@@ -1,0 +1,133 @@
+<script type="text/javascript">
+    RED.nodes.registerType('matrix-paginate-room', {
+        category: 'matrix',
+        color: '#00b7ca',
+        icon: "matrix.png",
+        outputLabels: ["Paginated Data", "Error"],
+        inputs: 1,
+        outputs: 2,
+        defaults: {
+            name: { value: null },
+            server: { type: "matrix-server-config" },
+            roomType: { value: "msg" },
+            roomValue: { value: "topic" },
+            paginateKeyType: { value: "msg" },
+            paginateKeyValue: { value: "paginationKey" },
+            paginateBackwardsType: { value: "bool" },
+            paginateBackwardsValue: { value: "true" },
+            pageSizeType: { value: "num" },
+            pageSizeValue: { value: "25" }
+        },
+        label: function () {
+            return this.name || "Paginate Room";
+        },
+        paletteLabel: 'Paginate Room',
+        oneditprepare: function () {
+            $("#node-input-room").typedInput({
+                type: this.roomType,
+                types: ['msg', 'flow', 'global', 'str'],
+            })
+                .typedInput('value', this.roomValue)
+                .typedInput('type', this.roomType);
+
+            $("#node-input-paginateBackwards").typedInput({
+                types: ['msg', 'flow', 'global', 'bool'],
+            })
+                .typedInput('value', this.paginateBackwardsValue)
+                .typedInput('type', this.paginateBackwardsType);
+
+            $("#node-input-paginateKey").typedInput({
+                types: ['msg', 'flow', 'global'],
+            })
+                .typedInput('value', this.paginateKeyValue)
+                .typedInput('type', this.paginateKeyType);
+
+            $("#node-input-pageSize").typedInput({
+                types: ['msg', 'flow', 'global', 'num'],
+            })
+                .typedInput('value', this.pageSizeValue)
+                .typedInput('type', this.pageSizeType);
+        },
+        oneditsave: function () {
+            this.roomType = $("#node-input-room").typedInput('type');
+            this.roomValue = $("#node-input-room").typedInput('value');
+            this.paginateBackwardsType = $("#node-input-paginateBackwards").typedInput('type');
+            this.paginateBackwardsValue = $("#node-input-paginateBackwards").typedInput('value');
+            this.paginateKeyType = $("#node-input-paginateKey").typedInput('type');
+            this.paginateKeyValue = $("#node-input-paginateKey").typedInput('value');
+            this.pageSizeType = $("#node-input-pageSize").typedInput('type');
+            this.pageSizeValue = $("#node-input-pageSize").typedInput('value');
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="matrix-paginate-room">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Matrix Server</label>
+        <input type="text" id="node-input-server">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-room"><i class="fa fa-comments"></i> Room</label>
+        <input type="text" id="node-input-room">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-paginateKey"><i class="fa fa-key"></i> Pagination Key</label>
+        <input type="text" id="node-input-paginateKey">
+        <div class="form-tips" style="margin-top: 10px;">A unique key to identify the current pagination session. If not provided, a new key will be generated for each session.</div>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-paginateBackwards"><i class="fa fa-arrow-left"></i> Paginate Backwards</label>
+        <input type="text" id="node-input-paginateBackwards">
+        <div class="form-tips" style="margin-top: 10px;">Set to true to paginate backwards (older events). Set to false to paginate forwards (newer events).</div>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-pageSize"><i class="fa fa-list"></i> Page Size</label>
+        <input type="text" id="node-input-pageSize">
+        <div class="form-tips" style="margin-top: 10px;">Set the number of events to retrieve per pagination call. It's recommended to keep this value at or below 25 to match the current initial synchronization limit. Adjust this based on your server’s load and capacity to avoid throttling or performance issues.</div>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="matrix-paginate-room">
+    <p>
+        The Matrix Paginate Room node allows you to retrieve historical or future events from a Matrix room, moving forwards or backwards through the event timeline.
+    </p>
+
+    <h3>Inputs</h3>
+    <ul>
+        <li><strong>msg</strong> (<em>default</em>): Triggers the pagination action based on the provided room and parameters.</li>
+    </ul>
+
+    <h3>Outputs</h3>
+    <ul>
+        <li>
+            <strong>Output 1 (Paginated Data)</strong>: Returns an array of events if more messages are available. Each event contains details such as:
+            <ul>
+                <li><code>msg.encrypted</code> (boolean) - Indicates if the message was encrypted (end-to-end encryption).</li>
+                <li><code>msg.redacted</code> (boolean) - Indicates if the message was redacted (deleted or hidden).</li>
+                <li><code>msg.payload</code> (string) - The message body or content.</li>
+                <li><code>msg.userId</code> (string) - The user ID of the message sender.</li>
+                <li><code>msg.topic</code> (string) - The room ID of the message's origin.</li>
+                <li><code>msg.eventId</code> (string) - The event ID.</li>
+                <li><code>msg.type</code> (string) - The type of message (e.g., <code>m.text</code>, <code>m.image</code>, <code>m.reaction</code>, etc.).</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Output 2 (Error)</strong>: If an error occurs during pagination, the error message is sent to this output.
+        </li>
+    </ul>
+
+    <h3>Dynamic Properties</h3>
+    <p>Some inputs like <strong>Room</strong>, <strong>Pagination Key</strong>, and <strong>Page Size</strong> can be dynamically set using message, flow, or global context variables.</p>
+
+    <h3>Usage</h3>
+    <p>To paginate through a room's timeline, trigger this node with a <code>msg</code> input. The first run will start the timeline, and a unique pagination key will be generated. Future calls can use this key to continue from where you left off. Use the "Paginate Backwards" option to move through older events or set it to false to move forwards through newer events.</p>
+</script>

@@ -7,8 +7,8 @@
     "fs-extra": "^11.1.0",
     "got": "^12.0.2",
     "isomorphic-webcrypto": "^2.3.8",
-    "marked": "^12.0.2",
-    "matrix-js-sdk": "^28.0.0",
+    "marked": "^16.4.1",
+    "matrix-js-sdk": "^38.4.0",
     "node-fetch": "^3.3.0",
     "node-localstorage": "^2.2.1",
     "olm": "https://gitlab.matrix.org/matrix-org/olm/-/package_files/2572/download",
@@ -40,6 +40,7 @@
       "matrix-synapse-create-edit-user": "src/matrix-synapse-create-edit-user.js",
       "matrix-synapse-deactivate-user": "src/matrix-synapse-deactivate-user.js",
       "matrix-synapse-join-room": "src/matrix-synapse-join-room.js",
+      "matrix-paginate-room": "src/matrix-paginate-room.js",
       "matrix-whois-user": "src/matrix-whois-user.js",
       "matrix-room-users": "src/matrix-room-users.js"
     }
