@@ -1,7 +1,3 @@
-Failed to fetch message content for ID $ranRJq1oFtiF8MdJ2e8XaLTcwoxN0tzbsodUYOcfY_4: node.server.matrixClient.getEvent is not a function
-
-
-
 module.exports = function(RED) {
     function MatrixReceiveMessage(n) {
         RED.nodes.createNode(this, n);
