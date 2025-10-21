@@ -55,9 +55,25 @@ module.exports = function(RED) {
             }
             msg.roomTopic = topicEvent?.getContent()?.topic || "No topic";
 
-            // Fetch the pinned messages
+            /// Fetch the pinned message IDs
             const pinnedEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
-            msg.roomPinnedMessages = pinnedEvent?.getContent()?.pinned || [];
+            const pinnedMessageIds = pinnedEvent?.getContent()?.pinned || [];
+
+            // Fetch message content for each pinned message ID
+            msg.roomPinnedMessages = await Promise.all(pinnedMessageIds.map(async (messageId) => {
+                try {
+                    const messageDetails = await node.server.matrixClient.getEvent(room.roomId, messageId);
+                    return {
+                        id: messageId,
+                        content: messageDetails.content.body || messageDetails.content.text || "No content",
+                        sender: messageDetails.sender,
+                        type: messageDetails.type,
+                    };
+                } catch (error) {
+                    node.error(`Failed to fetch message content for ID ${messageId}: ${error.message}`);
+                    return { id: messageId, content: "Error fetching content" };
+                }
+            }));
 
             const setUrls = (urlKey, encryptedKey) => {
                 const url = msg.encrypted ? msg.content[encryptedKey]?.url : msg.content[urlKey];
