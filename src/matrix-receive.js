@@ -55,6 +55,10 @@ module.exports = function(RED) {
             }
             msg.roomTopic = topicEvent?.getContent()?.topic || "No topic";
 
+            // Fetch the pinned messages
+            const pinnedEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
+            msg.roomPinnedMessages = pinnedEvent?.getContent()?.pinned || [];
+
             const setUrls = (urlKey, encryptedKey) => {
                 const url = msg.encrypted ? msg.content[encryptedKey]?.url : msg.content[urlKey];
                 if (url) {
