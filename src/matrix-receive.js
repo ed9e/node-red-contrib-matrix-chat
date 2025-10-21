@@ -1,3 +1,7 @@
+Failed to fetch message content for ID $ranRJq1oFtiF8MdJ2e8XaLTcwoxN0tzbsodUYOcfY_4: node.server.matrixClient.getEvent is not a function
+
+
+
 module.exports = function(RED) {
     function MatrixReceiveMessage(n) {
         RED.nodes.createNode(this, n);
@@ -62,13 +66,27 @@ module.exports = function(RED) {
             // Fetch message content for each pinned message ID
             msg.roomPinnedMessages = await Promise.all(pinnedMessageIds.map(async (messageId) => {
                 try {
-                    const messageDetails = await node.server.matrixClient.getEvent(room.roomId, messageId);
-                    return {
-                        id: messageId,
-                        content: messageDetails.content.body || messageDetails.content.text || "No content",
-                        sender: messageDetails.sender,
-                        type: messageDetails.type,
-                    };
+                    // Use the correct SDK method to fetch the event
+                    const timelineEvent = room.findEventById(messageId);
+                    
+                    if (timelineEvent) {
+                        // Event found in local timeline
+                        return {
+                            id: messageId,
+                            content: timelineEvent.getContent().body || timelineEvent.getContent().text || "No content",
+                            sender: timelineEvent.getSender(),
+                            type: timelineEvent.getType(),
+                        };
+                    } else {
+                        // Event not in timeline, fetch from server using HTTP API
+                        const eventData = await node.server.matrixClient.fetchRoomEvent(room.roomId, messageId);
+                        return {
+                            id: messageId,
+                            content: eventData.content.body || eventData.content.text || "No content",
+                            sender: eventData.sender,
+                            type: eventData.type,
+                        };
+                    }
                 } catch (error) {
                     node.error(`Failed to fetch message content for ID ${messageId}: ${error.message}`);
                     return { id: messageId, content: "Error fetching content" };
